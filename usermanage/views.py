@@ -3,6 +3,6 @@ from django.http import HttpResponse
 # Create your views here.
 
 def index(request):
-    return HttpResponse("这里是用户管理")
+    return render(request,"index.html")
 
 
