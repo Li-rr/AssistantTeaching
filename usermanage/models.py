@@ -11,3 +11,6 @@ class Stu(models.Model):
         managed = False
         db_table = 'stu'
 
+    def __str__(self):
+        return self.stuno+" "+self.stuname+" "+self.sex+" "+self.class_field
+
