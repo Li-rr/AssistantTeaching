@@ -78,7 +78,6 @@ def getStuentWorkDir_data(dir_path):
         chapter_name_list = []
         for line in lines:
             if line in work_name:   # 如果发现章节名称
-                print(lines.index(line))
                 # 将章节答案的起始地址加入到列表中
                 chapter_index_split.append(lines.index(line))
                 chapter_name_list.append(line)
@@ -88,7 +87,8 @@ def getStuentWorkDir_data(dir_path):
         all_chapter = []
         all_chapter.append(lines[split_index_1+1:split_index_2])
         all_chapter.append(lines[split_index_2+1:])
-        for fuck_chapter in all_chapter:
+        for i,fuck_chapter in enumerate(all_chapter):
+            submit_answer['作业名称'] = chapter_name_list[i]
             for answer in fuck_chapter:
                 answer_split = answer.split(" ")
                 answer_no = answer_split[0]
@@ -102,9 +102,15 @@ def getStuentWorkDir_data(dir_path):
                 # print("答案序号 {},  答案内容 {}".format(answer_no,answer_content_list))
                 # print(answer_split)
 
-            break
-            print(fuck_chapter)
-        # print(submit_answer)
+            # print(submit_answer)
+            json_str = json.dumps(submit_answer,indent=2,ensure_ascii=False)   # 缩进为2
+            file_name = '{}-{}-{}.json'.format(stuNo,stuName,chapter_name_list[i])
+            # print(file_name)
+            with open('workdata_dir/'+file_name,'w',encoding='utf8') as json_file:
+                json_file.write(json_str)
+            # break
+            # print(fuck_chapter)
+
 
 
 if __name__ == '__main__':
