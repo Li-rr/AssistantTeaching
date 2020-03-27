@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+<div class="col-lg-3 col-md-3 col-sm-3">
+    <table class="table table-hover">
+        <thead>
+        <th>学号</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>班级</th>
+        </thead>
+    <tbody>
+    {% for stu in all_stu %}
+        <tr>
+        <td>{{ stu.stuno }}</td>
+        <td>{{ stu.stuname }}</td>
+        <td>{{ stu.sex }}</td>
+        <td>{{ stu.class_field }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>
+<div class="col-lg-9 col-md-9 col-sm-9">
+    {% block other %}
+        <div class="center">
+        <strong>留待继承</strong>
+        </div>
+    {% endblock %}
+</div>
+</div>
+{% endblock %}
