@@ -18,6 +18,6 @@ from django.urls import path,include
 from usermanage import views as um
 
 urlpatterns = [
-    path('student/',include('usermanage.urls')),
+    path('',include('usermanage.urls')),
     path('admin/', admin.site.urls),
 ]
