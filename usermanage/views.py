@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from usermanage.models import Stu,Answer,Score
-from usermanage.utils import replaceNumber
+from usermanage.utils import replaceNumber,isFloat
+from django.core import serializers
+import json
 # Create your views here.
 
 def index(request):
@@ -26,12 +28,45 @@ def homeworkManage(request):
         work_name['workname'] = replaceNumber(work_name['workname'])
         if work_name['workname'] not in work_name_list:
             work_name_list.append(work_name['workname'])
-    print(work_name_list[0])
+    # print(work_name_list)
     stu_info = Score.objects.filter(workname='第一章').values('stuno','stuname')
+    answer_list = list(Score.objects.filter(workname = "第一章",stuno='20161994').values('worksubmit'))
+    answer_list = answer_list[0]['worksubmit']
+    answer_list = json.loads(answer_list)
+    choice_answer = []  # 选择题
+    blanks_answer = []  # 填空题
+    answer_questions = [] # j解答题
+    # print(answer_list)
+    # print(type(answer_list))
+    for k,v in answer_list.items():
+        # print(k,v,type(k),type(v))
+        if isFloat(k):
+            k_value = float(k)
+            # print(k_value)
+            if 1.0 <k_value < 2.0:   # 选择题
+                choice_answer.append((k,v))
+            elif 2.0 < k_value <3.0:    # 填空题
+                blanks_answer.append((k,v))
+            else:   # 解答题
+                answer_questions.append((k,v))
+
+    # print(answer_list[0]['worksubmit'])
+
+    # print(choice_answer)
+    # print()
+    # print(blanks_answer)
+    # print()
+    # print(answer_questions)
+
     # print(stu_info)
     return render(request,'h_workManage.html',
-                  {"workname_list":work_name_list,
-                                               "stu_info":stu_info})
+                  {
+                      "workname_list":work_name_list,
+                      "stu_info":stu_info,
+                      'choice_answer_list':choice_answer,
+                      'blanks_answer_list':blanks_answer,
+                      'answer_question_list':answer_questions
+                  })
 
 
 
