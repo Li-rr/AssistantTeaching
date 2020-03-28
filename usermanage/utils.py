@@ -11,6 +11,20 @@ def replaceNumber(n_str):
         if number in n_str:
             n_str = n_str.replace(number,number_dict[number])
     return  n_str
+
+# 判断字符串是否可以转换为浮点数
+def isFloat(f_str):
+    try:
+        x = float(f_str)    # 此处更改想判断的类型
+    except TypeError:
+        return False
+    except ValueError:
+        return False
+    except Exception as e:
+        return False
+    else:
+        return True
+
 if __name__ == '__main__':
     str_o = '第1章'
 
