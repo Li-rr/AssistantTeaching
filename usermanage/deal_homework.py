@@ -3,6 +3,7 @@ import json
 import sys
 import re
 import chardet
+debug = 1
 homeword_dir  = r"D:\WORKSPACE\助教工作\作业批改\作业数据"
 work_name = ['第一章','第二章','第三章','第四章']
 
@@ -74,6 +75,10 @@ def getDataForCurrentData(dir_list):
             # print(stu_dir)
             if i == 3:
                 break
+            if "费凡" in stu_dir:
+                continue
+            if "马姝媛" in stu_dir:
+                continue
             print("\n===========>")
             getStuentWorkDir_data(stu_dir)
 
@@ -81,11 +86,12 @@ def getDataForCurrentData(dir_list):
 
 # 获取学生提交文件夹内的附件
 def getStuentWorkDir_data(dir_path):
+    input_leave_fun(sys._getframe().f_code.co_name,1,debug)
     files = os.listdir(dir_path)
     submit_files = [os.path.join(dir_path,t_file) for t_file in files]
     print(submit_files,len(submit_files))
     # 先处理提交两个文件的情况
-    if len(submit_files) == 2:
+    if len(submit_files) > 1:
 
         for file in submit_files:   # 遍历多个提交文件
             # print(file)
@@ -108,7 +114,7 @@ def getStuentWorkDir_data(dir_path):
             # print(submit_answer)
 
             file_encoder = get_encoding(file)
-            print(file_encoder)
+            print('文件编码: {}'.format(file_encoder))
             # 打开提交的文件
             with open(file,'r',encoding=file_encoder) as f:
                 lines = f.readlines()
@@ -197,21 +203,29 @@ def getStuentWorkDir_data(dir_path):
         all_chapter.append(lines[split_index_2+1:])
         for i,fuck_chapter in enumerate(all_chapter):
             submit_answer['作业名称'] = chapter_name_list[i]
+            # 初始化作业对象，为生成JSON作准备
+            answer_dict = Answer(stuNo,stuName,workDate,chapter_name_list[i])
             for answer in fuck_chapter:
                 answer_split = answer.split(" ")
+                if len(answer_split) == 0:
+                    continue
+
+                # print(answer_split)
                 answer_no = answer_split[0]
                 answer_content_list = answer_split[1:]
-                try:
-                    float(answer_split[0])
-                except:
-                    print("答案序号必须是数字")
+
+                answer_dict.add(answer_no,answer_content_list)
+                # try:
+                #     float(answer_split[0])
+                # except:
+                #     print("答案序号必须是数字")
 
                 submit_answer[answer_no]= answer_content_list
                 # print("答案序号 {},  答案内容 {}".format(answer_no,answer_content_list))
                 # print(answer_split)
 
             # print(submit_answer)
-            json_str = json.dumps(submit_answer,indent=2,ensure_ascii=False)   # 缩进为2
+            json_str = json.dumps(answer_dict.answerDict,indent=2,ensure_ascii=False)   # 缩进为2
             file_name = '{}-{}-{}.json'.format(stuNo,stuName,chapter_name_list[i])
             # print(file_name)
             with open('workdata_dir/'+file_name,'w',encoding='utf8') as json_file:
