@@ -6,6 +6,47 @@ import chardet
 homeword_dir  = r"D:\WORKSPACE\助教工作\作业批改\作业数据"
 work_name = ['第一章','第二章','第三章','第四章']
 
+class Answer:
+    def __init__(self,stuNo,stuName,workDate,workName):
+        self.answernolist = []
+        self.answerContentlist = []
+        self.answerDict = {}
+        self.answerDict['学号'] = stuNo
+        self.answerDict['姓名'] = stuName
+        self.answerDict['作业日期'] = workDate
+        self.answerDict['作业名称'] = workName
+
+
+    def add(self,answerNo,anserContent:list):
+
+        # 如果是序号并且不在字典中
+        if isFloat(answerNo) and answerNo not in self.answerDict.keys():
+            self.answernolist.append(answerNo)  # 添加题目序号
+            self.answerDict[answerNo] = anserContent
+        elif isFloat(answerNo) and answerNo in self.answerDict.keys(): # 如果是序号并且在字典中
+            self.answerDict[answerNo].append(anserContent)
+
+
+        # 如果不可以当前序号不能转换为float，说明这个答案是多行答案
+        if not isFloat(answerNo):
+            print("++++",answerNo)
+            t_answerno = self.answernolist[-1]  # 取最后一个
+            self.answerDict[t_answerno].append(answerNo)
+            print("---=-===-",t_answerno,self.answerDict[t_answerno])
+
+# 判断字符串是否可以转换为浮点数
+def isFloat(f_str):
+    try:
+        x = float(f_str)    # 此处更改想判断的类型
+    except TypeError:
+        return False
+    except ValueError:
+        return False
+    except Exception as e:
+        return False
+    else:
+        return True
+
 def getHomeworkDir():
     dir_list = []   # 存储收集到的作业集合
     for cur_dir in os.listdir(homeword_dir):
@@ -66,13 +107,16 @@ def getStuentWorkDir_data(dir_path):
                 lines = f.readlines()
                 lines = [line.strip() for line in lines]
 
+            answer_dict = Answer(stuNo,stuName,workDate,workName)
+
             # 遍历当前文件中的所有行
             for i,line in enumerate(lines):
-                # print("\n")
+                print("=================》")
                 # 首先需要把顿号替换为空格
                 split_fuck_index = line.find('、') #查找顿号第一次出现的位置
                 # print(line)
-                if split_fuck_index != -1:
+
+                if split_fuck_index != -1:  # 发现顿号
                     try:
                         # print('截取到的序号',line[:split_fuck_index])
                         answer_no = float(line[:split_fuck_index])
@@ -80,12 +124,29 @@ def getStuentWorkDir_data(dir_path):
                         line = line.replace("、"," ",1)
                         # print(line[split_fuck_index])
                         # print(answer_no)
-                    except:
+                    except: # 如果顿号不是分隔序号的
                         print("ERROR! 本行不含序号")
                         print(line)
-
                 print("第{}行".format(i),line)
-            break
+                answer_list = line.split()
+                print(answer_list)
+                if len(answer_list) == 0:
+                    continue
+
+                answer_no = answer_list[0]
+                # if isFloat(answer_no):
+                #     print("是答案序号")
+                # else:
+                #     print("不是答案序号")
+                answer_content = answer_list[1:]
+                answer_dict.add(answer_no,answer_content)
+                print("答案序号：{}，答案内容：{}".format(answer_no,answer_content))
+
+            json_str = json.dumps(answer_dict.answerDict,indent=2,ensure_ascii=False)
+            file_name = '{}-{}-{}.json'.format(stuNo,stuName,workName)
+            with open('workdata_dir/'+file_name,'w',encoding='utf-8') as json_file:
+                json_file.write(json_str)
+            # break
 
 
     elif len(submit_files) == 1:
