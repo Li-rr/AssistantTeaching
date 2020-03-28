@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from usermanage.models import Stu
+from usermanage.models import Stu,Answer,Score
+from usermanage.utils import replaceNumber
 # Create your views here.
 
 def index(request):
@@ -19,7 +20,14 @@ def attendanceManage(request):
 
 # 作业管理
 def homeworkManage(request):
-    return render(request,'h_workManage.html')
+    work_name_all = Score.objects.values('workname').distinct()
+    work_name_list = []
+    for work_name in work_name_all:
+        work_name['workname'] = replaceNumber(work_name['workname'])
+        if work_name['workname'] not in work_name_list:
+            work_name_list.append(work_name['workname'])
+    # print(work_name_list)
+    return render(request,'h_workManage.html',{"workname_list":work_name_list})
 
 
 
