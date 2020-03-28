@@ -14,3 +14,22 @@ class Stu(models.Model):
     def __str__(self):
         return self.stuno+" "+self.stuname+" "+self.sex+" "+self.class_field
 
+class Answer(models.Model):
+    workname = models.CharField(db_column='workName', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    workanswer = models.TextField(db_column='workAnswer', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
+
+    class Meta:
+        managed = False
+        db_table = 'answer'
+
+class Score(models.Model):
+    stuno = models.OneToOneField('Stu', models.DO_NOTHING, db_column='stuNo', primary_key=True)  # Field name made lowercase.
+    worksubmit = models.TextField(db_column='workSubmit', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
+    workcorrection = models.TextField(db_column='workCorrection', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
+    workname = models.CharField(db_column='workName', max_length=10)  # Field name made lowercase.
+    stuname = models.CharField(db_column='stuName', max_length=10, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'score'
+        unique_together = (('stuno', 'workname'),)
