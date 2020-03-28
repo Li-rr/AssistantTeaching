@@ -2,6 +2,7 @@ import os
 import json
 import sys
 import re
+import chardet
 homeword_dir  = r"D:\WORKSPACE\助教工作\作业批改\作业数据"
 work_name = ['第一章','第二章','第三章','第四章']
 
@@ -23,7 +24,7 @@ def getDataForCurrentData(dir_list):
         # print(type(stu_work_dirs),len(stu_work_dirs))
         for i,stu_dir in enumerate(stu_work_dirs):
             # print(stu_dir)
-            if i == 1:
+            if i == 2:
                 break
             print("\n===========>")
             getStuentWorkDir_data(stu_dir)
@@ -37,8 +38,11 @@ def getStuentWorkDir_data(dir_path):
     print(submit_files,len(submit_files))
     # 先处理提交两个文件的情况
     if len(submit_files) == 2:
-        for file in submit_files:
+
+        for file in submit_files:   # 遍历多个提交文件
             # print(file)
+            submit_answer = {}  # 用于将答案转换为json
+
             file_split = re.split('[\\\,.]',file)
             print(file_split,len(file_split))
 
@@ -49,6 +53,39 @@ def getStuentWorkDir_data(dir_path):
             print('作业日期 ({}) 学号 ({}) 姓名 ({}) 作业名称 {}'.format(workDate, stuNo, stuName, workName))
             assert workName in work_name, "作业名称错误"
 
+            submit_answer['学号'] = stuNo
+            submit_answer['姓名'] = stuName
+            submit_answer['作业日期'] = workDate
+            submit_answer['作业名称'] = workName
+            # print(submit_answer)
+
+            file_encoder = get_encoding(file)
+            print(file_encoder)
+            # 打开提交的文件
+            with open(file,'r',encoding=file_encoder) as f:
+                lines = f.readlines()
+                lines = [line.strip() for line in lines]
+
+            # 遍历当前文件中的所有行
+            for i,line in enumerate(lines):
+                # print("\n")
+                # 首先需要把顿号替换为空格
+                split_fuck_index = line.find('、') #查找顿号第一次出现的位置
+                # print(line)
+                if split_fuck_index != -1:
+                    try:
+                        # print('截取到的序号',line[:split_fuck_index])
+                        answer_no = float(line[:split_fuck_index])
+                        # line[split_fuck_index] = ' '
+                        line = line.replace("、"," ",1)
+                        # print(line[split_fuck_index])
+                        # print(answer_no)
+                    except:
+                        print("ERROR! 本行不含序号")
+                        print(line)
+
+                print("第{}行".format(i),line)
+            break
 
 
     elif len(submit_files) == 1:
@@ -68,8 +105,11 @@ def getStuentWorkDir_data(dir_path):
         submit_answer['作业日期'] = workDate
         print('作业日期 ({}) 学号 ({}) 姓名 ({})'.format(workDate, stuNo, stuName))
 
+        file_encoder = get_encoding(file)
+        print(file_encoder)
+
         # 打开文件
-        with open(file,'r',encoding='utf8') as f:
+        with open(file,'r',encoding=file_encoder) as f:
             lines = f.readlines()
             lines = [line.strip() for line in lines]
 
@@ -111,6 +151,12 @@ def getStuentWorkDir_data(dir_path):
             # break
             # print(fuck_chapter)
 
+# 获取文件编码类型
+def get_encoding(file):
+    # 二进制方式读取，获取字节数据，检测类型
+    with open(file, 'rb') as f:
+        data = f.read()
+        return chardet.detect(data)['encoding']
 
 
 if __name__ == '__main__':
