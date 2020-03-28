@@ -73,12 +73,17 @@ def getDataForCurrentData(dir_list):
         # print(type(stu_work_dirs),len(stu_work_dirs))
         for i,stu_dir in enumerate(stu_work_dirs):
             # print(stu_dir)
-            if i == 3:
-                break
-            if "费凡" in stu_dir:
+            # if i == 5:
+            #     break
+            # if "费凡" in stu_dir:
+            #     continue
+            # if "马姝媛" in stu_dir:
+            #     continue
+            # if "王月" in stu_dir or "王鹤" in stu_dir:
+            #     continue
+            if "吴昊" in stu_dir:
                 continue
-            if "马姝媛" in stu_dir:
-                continue
+
             print("\n===========>")
             getStuentWorkDir_data(stu_dir)
 
@@ -103,7 +108,7 @@ def getStuentWorkDir_data(dir_path):
             stuNo = file_split[6].split('-')[0]
             stuName = file_split[6].split('-')[1]
             workDate = file_split[5]
-            workName = file_split[7][-len(stuName):]
+            workName = file_split[7][-3:]
             print('作业日期 ({}) 学号 ({}) 姓名 ({}) 作业名称 {}'.format(workDate, stuNo, stuName, workName))
             assert workName in work_name, "作业名称错误"
 
