@@ -5,7 +5,7 @@ import re
 import chardet
 debug = 1
 homeword_dir  = r"D:\WORKSPACE\助教工作\作业批改\作业数据"
-work_name = ['第一章','第二章','第三章','第四章']
+work_name = ['第一章','第二章','第三章','第四章','第1章','第2章']
 
 def input_leave_fun(name,choice,debug):
     if debug == 1:
@@ -82,6 +82,8 @@ def getDataForCurrentData(dir_list):
             # if "王月" in stu_dir or "王鹤" in stu_dir:
             #     continue
             if "吴昊" in stu_dir:
+                continue
+            if "张腾" in stu_dir:
                 continue
 
             print("\n===========>")
