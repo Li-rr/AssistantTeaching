@@ -26,8 +26,12 @@ def homeworkManage(request):
         work_name['workname'] = replaceNumber(work_name['workname'])
         if work_name['workname'] not in work_name_list:
             work_name_list.append(work_name['workname'])
-    # print(work_name_list)
-    return render(request,'h_workManage.html',{"workname_list":work_name_list})
+    print(work_name_list[0])
+    stu_info = Score.objects.filter(workname='第一章').values('stuno','stuname')
+    # print(stu_info)
+    return render(request,'h_workManage.html',
+                  {"workname_list":work_name_list,
+                                               "stu_info":stu_info})
 
 
 
