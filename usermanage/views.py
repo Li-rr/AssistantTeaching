@@ -19,7 +19,7 @@ def attendanceManage(request):
 
 # 作业管理
 def homeworkManage(request):
-    return HttpResponse("这里是作业管理")
+    return render(request,'h_workManage.html')
 
 
 
