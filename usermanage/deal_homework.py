@@ -6,6 +6,13 @@ import chardet
 homeword_dir  = r"D:\WORKSPACE\助教工作\作业批改\作业数据"
 work_name = ['第一章','第二章','第三章','第四章']
 
+def input_leave_fun(name,choice,debug):
+    if debug == 1:
+        if choice == 1:
+            print("---------------  input {} function --------------- ".format(name))
+        else:
+            print("---------------  leave {} function ---------------\n".format(name))
+
 class Answer:
     def __init__(self,stuNo,stuName,workDate,workName):
         self.answernolist = []
@@ -29,10 +36,10 @@ class Answer:
 
         # 如果不可以当前序号不能转换为float，说明这个答案是多行答案
         if not isFloat(answerNo):
-            print("++++",answerNo)
+            # print("++++",answerNo)
             t_answerno = self.answernolist[-1]  # 取最后一个
             self.answerDict[t_answerno].append(answerNo)
-            print("---=-===-",t_answerno,self.answerDict[t_answerno])
+            # print("---=-===-",t_answerno,self.answerDict[t_answerno])
 
 # 判断字符串是否可以转换为浮点数
 def isFloat(f_str):
@@ -65,7 +72,7 @@ def getDataForCurrentData(dir_list):
         # print(type(stu_work_dirs),len(stu_work_dirs))
         for i,stu_dir in enumerate(stu_work_dirs):
             # print(stu_dir)
-            if i == 2:
+            if i == 3:
                 break
             print("\n===========>")
             getStuentWorkDir_data(stu_dir)
@@ -111,7 +118,7 @@ def getStuentWorkDir_data(dir_path):
 
             # 遍历当前文件中的所有行
             for i,line in enumerate(lines):
-                print("=================》")
+                # print("=================》")
                 # 首先需要把顿号替换为空格
                 split_fuck_index = line.find('、') #查找顿号第一次出现的位置
                 # print(line)
@@ -126,10 +133,10 @@ def getStuentWorkDir_data(dir_path):
                         # print(answer_no)
                     except: # 如果顿号不是分隔序号的
                         print("ERROR! 本行不含序号")
-                        print(line)
-                print("第{}行".format(i),line)
+                        # print(line)
+                # print("第{}行".format(i),line)
                 answer_list = line.split()
-                print(answer_list)
+                # print(answer_list)
                 if len(answer_list) == 0:
                     continue
 
@@ -140,7 +147,7 @@ def getStuentWorkDir_data(dir_path):
                 #     print("不是答案序号")
                 answer_content = answer_list[1:]
                 answer_dict.add(answer_no,answer_content)
-                print("答案序号：{}，答案内容：{}".format(answer_no,answer_content))
+                # print("答案序号：{}，答案内容：{}".format(answer_no,answer_content))
 
             json_str = json.dumps(answer_dict.answerDict,indent=2,ensure_ascii=False)
             file_name = '{}-{}-{}.json'.format(stuNo,stuName,workName)
