@@ -4,3 +4,4 @@ __pycache__/
 usermanage/__pycache__/
 usermanage/migrations/__pycache__/
 AssistantTeaching/__pycache__/
+usermanage/test.py
