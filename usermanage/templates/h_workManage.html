@@ -15,7 +15,7 @@
             </ul>
         </div>
         <div id="stu_area" class="col-sm-3 col-md-3 col-lg-2">
-            <table class="table table-hover text-center table-bordered">
+            <table class="table table-hover table-condensed table-bordered">
                 <thead>
                 <th>学号</th>
                 <th>姓名</th>
@@ -37,10 +37,11 @@
                 </tbody>
             </table>
         </div>
-        <div id="work_area" class="col-sm-5 col-md-5 col-lg-5">
-            <table class="table text-nowrap table-responsive" >
-                <thead>
-                <th>作业区</th>
+        <div id="work_area" class="col-sm-6 col-md-6 col-lg-6">
+            <table class="table   table-condensed">
+                {#            <caption>作业区</caption>#}
+                <thead class="text-center">
+                <th colspan="5"><strong>作业区</strong></th>
                 </thead>
                 <tbody>
 
@@ -53,7 +54,12 @@
                         {% endfor %}
                     </tr>
                 {% endfor %}
-
+                <tr>
+                    <td colspan="4"><textarea class="form-control"></textarea></td>
+                    <td>
+                        <button class="button btn-primary" id="choicheBtn">选择题提交</button>
+                    </td>
+                </tr>
                 {#                填空题答案区#}
                 {% for blank_answer_list in blanks_double_answer_list %}
                     <tr>
@@ -61,7 +67,8 @@
                             <td class="" id="{{ blank_answer.no }}"> {{ blank_answer.no }} &nbsp;&nbsp;
                                 {% for cur_content in blank_answer.content %}
                                     <label class="form-check-label ">
-                                   <input type="checkbox" class="" id="td{{ blank_answer.no }}">&nbsp;{{ cur_content }}
+                                        <input type="checkbox" class=""
+                                               id="td{{ blank_answer.no }}">&nbsp;{{ cur_content }}
                                     </label>
                                 {% endfor %}
                             </td>
@@ -69,23 +76,67 @@
                     </tr>
                 {% endfor %}
 
-{#                解答题答案区#}
+                <tr>
+                    <td colspan="4"><textarea class="form-control"></textarea></td>
+                    <td>
+                        <button class="btn btn-primary" id="blankBtn">填空题提交</button>
+                    </td>
+                </tr>
+
+                {#                解答题答案区#}
                 {% for answer_question in answer_question_list %}
                     <tr>
-                    <td colspan="5">
-                        {{ answer_question.no }}
-                        {% for cur_content in answer_question.content %}
-                            {{ cur_content }},
+                        <td colspan="5">
+                            {{ answer_question.no }}&nbsp;
+                            <input type="checkbox" id="td{{ answer_question.no }}">
+                            {% for cur_content in answer_question.content %}
+                                {{ cur_content }},
                             {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4"><textarea class="form-control"></textarea></td>
+                    <td>
+                        <button class="btn btn-primary" id="answerQuestionBtn">解答题提交</button>
                     </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="problem_area" class="col-sm-1 col-md-1 col-lg-3">
+            <table class="table table-condensed">
+                <thead>
+                <th>题目区</th>
+                </thead>
+                <tbody>
+                {% for problem in problem_answer_list %}
+                    <tr>
+                        <td>
+                            {{ problem.prob_no }}&nbsp;
+                            {{ problem.prob_content }}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+
+
+    <script>
+        //fuck you
+        $(document).ready(function () {
+            $("#choicheBtn").click(function () {
+                alert("点击了选择题区域的按钮")
+            });
+            $('#blankBtn').click(function () {
+                alert("点击了填空题区域的按钮")
+            });
+            $("#answerQuestionBtn").click(function () {
+                alert("点击了解答题区域的按钮")
+            })
+        })
+    </script>
 {% endblock %}
 
-<script>
-    //fuck you
-</script>

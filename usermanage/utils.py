@@ -51,7 +51,14 @@ class AnswerQuestion():
         # print(content)
         # print("self.content")
         # print(self.content)
+# 题目
+class ProblemOjbect():
+    def __init__(self,no,content):
+        self.prob_no = no
+        self.prob_content = content
 
+    def __str__(self):
+        return "{}-{}".format(self.prob_no,self.prob_content)
 # 将一维列表转换为二维列表
 def _1dTo2d_list(origin_list,dim):
 
