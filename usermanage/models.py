@@ -33,3 +33,12 @@ class Score(models.Model):
         managed = False
         db_table = 'score'
         unique_together = (('stuno', 'workname'),)
+
+class Problem(models.Model):
+    workname = models.CharField(max_length=10, blank=True, null=True)
+    wrokcontent = models.TextField(db_column='wrokContent', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
+
+    class Meta:
+        managed = False
+        db_table = 'problem'
+
