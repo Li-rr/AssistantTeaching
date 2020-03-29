@@ -24,6 +24,15 @@ def attendanceManage(request):
 
 # 作业管理
 def homeworkManage(request):
+    #--- 获取请求数据
+
+    req_workname = request.GET.get('workname')
+    print("请求数据 {}".format(req_workname))
+    if req_workname == None:
+        req_workname = "第一章"
+
+
+
     work_name_all = Score.objects.values('workname').distinct()
     work_name_list = []
     for work_name in work_name_all:
@@ -31,13 +40,13 @@ def homeworkManage(request):
         if work_name['workname'] not in work_name_list:
             work_name_list.append(work_name['workname'])
     # print(work_name_list)
-    stu_info = Score.objects.filter(workname='第一章').values('stuno','stuname')   # 这里写死了，以后改
-    answer_list = list(Score.objects.filter(workname = "第一章",stuno='20161994').values('worksubmit'))    # 这里写死了，以后改
+    stu_info = Score.objects.filter(workname=req_workname).values('stuno','stuname')   # 这里写死了，以后改
+    answer_list = list(Score.objects.filter(workname = req_workname,stuno='20161994').values('worksubmit'))    # 这里写死了，以后改
     answer_list = answer_list[0]['worksubmit']
     answer_list = json.loads(answer_list)
 
     # 获取填空题&解答题数据
-    problem_list = list(Problem.objects.filter(workname='第一章').values("wrokcontent"))   # 这里写死了，以后改
+    problem_list = list(Problem.objects.filter(workname=req_workname).values("wrokcontent"))   # 这里写死了，以后改
     problem_list = problem_list[0]['wrokcontent']
     problem_list = json.loads(problem_list)
     # print(problem_list)
@@ -81,5 +90,6 @@ def homeworkManage(request):
                       'problem_answer_list':prob_answer_list
                   })
 
-
+def test(request):
+    return render(request,'h_workManage.html',{'test':"这里是测试"})
 

@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {{ test }}
     <div class="row">
         <div id="workName" class="col-sm-2 col-md-2 col-lg-1">
             <ul class="list-group text-center">
                 <strong class="">作业名称</strong>
                 {% for workname in  workname_list %}
                     {% if  forloop.counter  == 1 %}
-                        <li class="list-group-item active" id="{{ workname }}">{{ workname }}</li>
+                        <li class="list-group-item" id="{{ workname }}">{{ workname }}</li>
                     {% else %}
                         <li class="list-group-item" id="{{ workname }}">{{ workname }}</li>
                     {% endif %}
@@ -23,13 +24,13 @@
                 <tbody>
                 {% for stu in stu_info %}
                     {% if forloop.counter == 1 %}
-                        <tr id="{{ stu.stuno }}" class="">
-                            <td>{{ stu.stuno }}</td>
+                        <tr  class="">
+                            <td class="stuno">{{ stu.stuno }}</td>
                             <td>{{ stu.stuname }}</td>
                         </tr>
                     {% else %}
-                        <tr id="{{ stu.stuno }}">
-                            <td>{{ stu.stuno }}</td>
+                        <tr >
+                            <td class="stuno">{{ stu.stuno }}</td>
                             <td>{{ stu.stuname }}</td>
                         </tr>
                     {% endif %}
@@ -127,6 +128,33 @@
     <script>
         //fuck you
         $(document).ready(function () {
+            // 选取第一章的作业
+            $("li").click(function () {
+                alert($(this).html())
+                workname = $(this).html()   // 获取章节名称,string类型
+
+                $.ajax({
+                    type:"GET",
+                    url: "/homework",
+                    data:{
+                        "workname":workname
+                    },
+                    success: function (msg) {
+                        console.log(msg)
+                        window.location.href = '/homework?workname='+workname
+                        {#window.location.reload()  //刷新页面#} 这个操作不管用
+                    },
+                    error: function () {
+                        console.log("更新作业数据失败")
+                    }
+                })
+            });
+            $(".stuno").click(function () {
+                alert($(this).text())
+                stuinfo = $(this).text()
+                console.log(typeof (stuinfo))
+                console.log(stuinfo)
+            })
             $("#choicheBtn").click(function () {
                 alert("点击了选择题区域的按钮")
             });
