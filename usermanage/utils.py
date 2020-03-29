@@ -1,3 +1,4 @@
+import numpy as np
 number_dict={
     '1':'一',
     '2':'二',
@@ -28,20 +29,50 @@ def isFloat(f_str):
 # 选择题
 class ChoiceAnswer():
     def __init__(self, no,content):
-        self.no = float(no)
+        self.no = no
         self.content = str(content)
     def __str__(self):
         return "{}-{}".format(self.no,self.content)
 # 填空题
 class BlankAnswer():
     def __init__(self,no,content):
-        self.no = float(no)
-        self.content = content
+        self.no = no
+        self.content = [cur_content for cur_content in content if cur_content != None]
+        # print("content")
+        # print(content)
+        # print("self.content")
+        # print(self.content)
 # 解答题
 class AnswerQuestion():
-    def __int__(self,no,content):
-        self.no = float(no)
-        self.content = content
+    def __init__(self,no,content):
+        self.no = no
+        self.content = [cur_content for cur_content in content if cur_content != None]
+        # print("content")
+        # print(content)
+        # print("self.content")
+        # print(self.content)
+
+# 将一维列表转换为二维列表
+def _1dTo2d_list(origin_list,dim):
+
+    need_list = []
+    temp_list = []
+    for i,elem in enumerate(origin_list):
+        # print(elem,type(elem))
+        temp_list.append(elem)
+        if (i+1) % dim == 0:
+            need_list.append(temp_list)
+            temp_list = []
+    counter = 0
+    for fuck in need_list:
+        counter += len(fuck)
+    # print(counter)
+    # print(origin_list[counter:])
+    need_list.append(origin_list[counter:])
+    # for fuck in need_list:
+    #     for cur_fuck in fuck:
+    #         print(cur_fuck)
+    return need_list
 
 if __name__ == '__main__':
     str_o = '第1章'

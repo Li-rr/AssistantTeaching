@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from usermanage.models import Stu,Answer,Score
-from usermanage.utils import replaceNumber,isFloat,ChoiceAnswer,BlankAnswer
+from usermanage.utils import replaceNumber,isFloat,ChoiceAnswer,BlankAnswer,AnswerQuestion
+from usermanage.utils import _1dTo2d_list
+import numpy as np
 from django.core import serializers
 import json
 # Create your views here.
@@ -36,9 +38,8 @@ def homeworkManage(request):
     choice_answer = []  # 选择题
     blanks_answer = []  # 填空题
     answer_questions = [] # j解答题
-    temp_list_2,temp_list_1 = [],[]
-    blank_counter,choice_counter = 1,1
-    blank_range,choice_range = 5,4
+
+    blank_range,choice_range = 5,5
     # print(answer_list)
     # print(type(answer_list))
     for k,v in answer_list.items():
@@ -47,30 +48,16 @@ def homeworkManage(request):
             k_value = float(k)
             # print(k_value)
             if 1.0 <k_value < 2.0:   # 选择题
-                temp_list_1.append(ChoiceAnswer(k,v[0]))
-                if choice_counter%choice_range == 0:
-                    print('choice_counter',choice_counter)
-                    choice_answer.append(temp_list_1)
-                    temp_list_1= []
-                choice_counter += 1
+                choice_answer.append(ChoiceAnswer(k,v[0]))
             elif 2.0 < k_value <3.0:    # 填空题
-                temp_list_2.append(BlankAnswer(k,v))  # 添加序号和内容，分别为字符串和列表
-                if blank_counter % blank_range == 0:
-                    blanks_answer.append(temp_list_2)
-                    temp_list_2= []
-                blank_counter +=1
+                blanks_answer.append(BlankAnswer(k,v))  # 添加序号和内容，分别为字符串和列表
             else:   # 解答题
-                answer_questions.append((k,v))
+                answer_questions.append(AnswerQuestion(k,v))
 
 
-    # print(answer_list[0]['worksubmit'])
+    choice_answer = _1dTo2d_list(choice_answer,choice_range)
+    blanks_answer = _1dTo2d_list(blanks_answer,blank_range)
 
-    # print(choice_answer)
-    # print()
-    # print(blanks_answer[8].no)
-    # print(type(blanks_answer[8].content))
-    # print()
-    # print(answer_questions)
 
     # print(stu_info)
     return render(request,'h_workManage.html',
