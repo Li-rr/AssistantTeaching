@@ -38,13 +38,13 @@
             </table>
         </div>
         <div id="work_area" class="col-sm-5 col-md-5 col-lg-5">
-            <table class="table text-center">
+            <table class="table text-nowrap">
                 <thead>
                 <th>作业区</th>
                 </thead>
                 <tbody>
 
-{##}
+                {#                选择题答案区#}
                 {% for choice_answer_list in choice_double_answer_list %}
 
                     <tr>
@@ -53,7 +53,21 @@
                         {% endfor %}
                     </tr>
                 {% endfor %}
-                
+
+                {#                填空题答案区#}
+                {% for blank_answer_list in blanks_double_answer_list %}
+                    <tr>
+                        {% for blank_answer in blank_answer_list %}
+                            <td class="" id="{{ blank_answer.no }}"> {{ blank_answer.no }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                {% for cur_content in blank_answer.content %}
+                                    <label class="form-check-label">
+                                   <input type="checkbox" class="form-check-input" value="">{{ cur_content }}
+                                    </label>
+                                {% endfor %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
