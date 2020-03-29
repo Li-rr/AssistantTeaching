@@ -25,17 +25,24 @@ def isFloat(f_str):
     else:
         return True
 
+# 选择题
 class ChoiceAnswer():
     def __init__(self, no,content):
         self.no = float(no)
         self.content = str(content)
     def __str__(self):
         return "{}-{}".format(self.no,self.content)
-
+# 填空题
 class BlankAnswer():
     def __init__(self,no,content):
         self.no = float(no)
         self.content = content
+# 解答题
+class AnswerQuestion():
+    def __int__(self,no,content):
+        self.no = float(no)
+        self.content = content
+
 if __name__ == '__main__':
     str_o = '第1章'
 
