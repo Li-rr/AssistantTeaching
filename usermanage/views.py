@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from usermanage.models import Stu,Answer,Score
-from usermanage.utils import replaceNumber,isFloat
+from usermanage.utils import replaceNumber,isFloat,ChoiceAnswer
 from django.core import serializers
 import json
 # Create your views here.
@@ -36,6 +36,9 @@ def homeworkManage(request):
     choice_answer = []  # 选择题
     blanks_answer = []  # 填空题
     answer_questions = [] # j解答题
+    temp_list = []
+    choice_counter = 1
+    choice_range = 5
     # print(answer_list)
     # print(type(answer_list))
     for k,v in answer_list.items():
@@ -44,15 +47,21 @@ def homeworkManage(request):
             k_value = float(k)
             # print(k_value)
             if 1.0 <k_value < 2.0:   # 选择题
-                choice_answer.append((k,v))
+                temp_list.append(ChoiceAnswer(k,v[0]))
+                if choice_counter%choice_range == 0:
+                    print('choice_counter',choice_counter)
+                    choice_answer.append(temp_list)
+                    temp_list= []
+                choice_counter += 1
             elif 2.0 < k_value <3.0:    # 填空题
                 blanks_answer.append((k,v))
             else:   # 解答题
                 answer_questions.append((k,v))
 
+
     # print(answer_list[0]['worksubmit'])
 
-    # print(choice_answer)
+    print(choice_answer)
     # print()
     # print(blanks_answer)
     # print()
@@ -63,7 +72,7 @@ def homeworkManage(request):
                   {
                       "workname_list":work_name_list,
                       "stu_info":stu_info,
-                      'choice_answer_list':choice_answer,
+                      'choice_double_answer_list':choice_answer,
                       'blanks_answer_list':blanks_answer,
                       'answer_question_list':answer_questions
                   })

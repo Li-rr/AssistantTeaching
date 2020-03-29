@@ -44,13 +44,16 @@
                 </thead>
                 <tbody>
 
+{##}
+                {% for choice_answer_list in choice_double_answer_list %}
 
-                {% for choice_answer in choice_answer_list %}
                     <tr>
-                            <td>{{ choice_answer }}</td>
+                        {% for choice_answer in choice_answer_list %}
+                            <td id="{{ choice_answer.no }}">{{ choice_answer.no }}. {{ choice_answer.content }}</td>
+                        {% endfor %}
                     </tr>
                 {% endfor %}
-
+                
                 </tbody>
             </table>
         </div>
