@@ -6,6 +6,7 @@ import traceback
 
 answer_dir = r"D:\WORKSPACE\助教工作\作业批改\作业答案"
 datadir = r"D:\WORKSPACE\助教工作\AssistantTeaching\usermanage\workdata_dir"
+problem_dir = r"D:\WORKSPACE\助教工作\作业批改\作业题目"
 def getDatabase():
     conn = pymysql.connect(
         host='localhost',user='root',passwd='lrr1996429',
@@ -99,7 +100,57 @@ def readChoiceAnswer():
             conn.rollback()
 
         closeDataBase(conn)
+
+
+def readProblem():
+    file_list = []
+    for file in os.listdir(problem_dir):
+        name,type= os.path.splitext(file)
+        if "txt" in type:
+            file_list.append(file)
+
+    path_list = [os.path.join(problem_dir,file) for file in file_list]
+
+    for i,file in enumerate(path_list):
+        file_name = file_list[i].split(".")[0]
+        problem_dict = {}
+        print(file_name)
+
+        with open(file,'r',encoding='utf8') as f:
+            lines = f.readlines()
+            lines = [line.strip() for line in lines]
+
+        # print(lines)
+        for line in lines:
+            problem_list = line.split(" ")
+            if len(problem_list) == 0 or len(problem_list[0]) == 0:
+                continue
+            # print(problem_list)
+            problem_no = problem_list[0]
+            problem_content = problem_list[1]
+
+            problem_dict[problem_no] = problem_content
+        # print(problem_dict)
+        json_str = json.dumps(problem_dict,indent=2,ensure_ascii=False)
+        sql = (
+            "insert into problem (workname, wrokcontent) "+
+            " values ('%s','{json}');"
+        )
+        t_sql = sql%file_name
+        t_sql = t_sql.format(json=pymysql.escape_string(json_str))
+        conn = getDatabase()
+        cursor = conn.cursor()
+        try:
+            cursor.execute(t_sql)
+            conn.commit()
+        except:
+            traceback.print_exc()
+            conn.rollback()
+
+        closeDataBase(conn)
+
+
 if __name__ == '__main__':
     # file_list = readFileList()
     # insertData(file_list)
-    readChoiceAnswer()
+    readProblem()
