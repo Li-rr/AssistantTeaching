@@ -25,6 +25,12 @@ def isFloat(f_str):
     else:
         return True
 
+class ChoiceAnswer():
+    def __init__(self, no,content):
+        self.no = float(no)
+        self.content = str(content)
+    def __str__(self):
+        return "{}-{}".format(self.no,self.content)
 if __name__ == '__main__':
     str_o = '第1章'
 
