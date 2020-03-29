@@ -38,7 +38,7 @@
             </table>
         </div>
         <div id="work_area" class="col-sm-5 col-md-5 col-lg-5">
-            <table class="table text-nowrap">
+            <table class="table text-nowrap table-responsive" >
                 <thead>
                 <th>作业区</th>
                 </thead>
@@ -58,14 +58,26 @@
                 {% for blank_answer_list in blanks_double_answer_list %}
                     <tr>
                         {% for blank_answer in blank_answer_list %}
-                            <td class="" id="{{ blank_answer.no }}"> {{ blank_answer.no }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <td class="" id="{{ blank_answer.no }}"> {{ blank_answer.no }} &nbsp;&nbsp;
                                 {% for cur_content in blank_answer.content %}
-                                    <label class="form-check-label">
-                                   <input type="checkbox" class="form-check-input" value="">{{ cur_content }}
+                                    <label class="form-check-label ">
+                                   <input type="checkbox" class="" id="td{{ blank_answer.no }}">&nbsp;{{ cur_content }}
                                     </label>
                                 {% endfor %}
                             </td>
                         {% endfor %}
+                    </tr>
+                {% endfor %}
+
+{#                解答题答案区#}
+                {% for answer_question in answer_question_list %}
+                    <tr>
+                    <td colspan="5">
+                        {{ answer_question.no }}
+                        {% for cur_content in answer_question.content %}
+                            {{ cur_content }},
+                            {% endfor %}
+                    </td>
                     </tr>
                 {% endfor %}
                 </tbody>
