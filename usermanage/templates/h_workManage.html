@@ -25,12 +25,12 @@
                 {% for stu in stu_info %}
                     {% if req_stuno == stu.stuno %}
                         <tr  class="table-primary">
-                            <td class="stuno" id="stuno_select">{{ stu.stuno }}</td>
+                            <td class="stuno stu{{ forloop.counter }}" id="stuno_select">{{ stu.stuno }}</td>
                             <td>{{ stu.stuname }}</td>
                         </tr>
                     {% else %}
                         <tr >
-                            <td class="stuno">{{ stu.stuno }}</td>
+                            <td class="stuno stu{{ forloop.counter }}">{{ stu.stuno }}</td>
                             <td>{{ stu.stuname }}</td>
                         </tr>
                     {% endif %}
@@ -42,7 +42,10 @@
             <table class="table   table-condensed table-bordered">
                 {#            <caption>作业区</caption>#}
                 <thead class="text-center">
-                <th colspan="5"><strong>作业区</strong></th>
+                <th colspan="5">
+                    <strong>作业区</strong>
+                    当前学生：{{ req_stuno }}
+                </th>
                 </thead>
                 <tbody>
 
@@ -183,6 +186,17 @@
             })
             $("#choicheBtn").click(function () {
                 alert("点击了选择题区域的按钮")
+                stuno_select = $('#stuno_select').attr('class').split(' ')[1]
+                stu = stuno_select.substr(0,3)
+                str_number = stuno_select.substr(3,stuno_select.length-3)
+                str_number = parseInt(str_number)
+                number = str_number +1
+                stuno_next = stu+number
+                stuno_next_number = $("."+stuno_next).text()
+                alert(stuno_next_number)
+                {#if ({{ stu_info.count }} > number)#}
+                {#    alert("fuck you");#}
+                {#alert({{ stu_info.count }})#}
             });
             $('#blankBtn').click(function () {
                 alert("点击了填空题区域的按钮")
@@ -233,7 +247,15 @@
                         "workname": workname_select
                     },
                     success: function () {
-                        alert("上传数据成功")
+                        alert("上传数据成功，进入下一个学生")
+                        stuno_select = $('#stuno_select').attr('class').split(' ')[1]
+                        stu = stuno_select.substr(0,3)
+                        str_number = stuno_select.substr(3,stuno_select.length-3)
+                        str_number = parseInt(str_number)
+                        number = str_number +1
+                        stuno_next = stu+number
+                        stuno_next_number = $("."+stuno_next).text()
+                        window.location.href = '/homework?workname='+workname_select+"&stuno="+stuno_next_number
                     },
                     error: function () {
                         alert("上传数据失败")
