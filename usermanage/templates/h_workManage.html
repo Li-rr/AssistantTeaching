@@ -51,7 +51,7 @@
 
                     <tr>
                         {% for choice_answer in choice_answer_list %}
-                            <td id="{{ choice_answer.no }}">{{ choice_answer.no }}. {{ choice_answer.content }}</td>
+                            <td class="choiceAnswer">{{ choice_answer.no }}. {{ choice_answer.content }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
@@ -72,12 +72,9 @@
                 {% for blank_answer_list in blanks_double_answer_list %}
                     <tr>
                         {% for blank_answer in blank_answer_list %}
-                            <td class="" id="{{ blank_answer.no }}"> {{ blank_answer.no }} &nbsp;&nbsp;
+                            <td class="blankAnswer"> {{ blank_answer.no }} &nbsp;&nbsp;
                                 {% for cur_content in blank_answer.content %}
-                                    <label class="form-check-label ">
-                                        <input type="checkbox" class=""
-                                               id="td{{ blank_answer.no }}">&nbsp;{{ cur_content }}
-                                    </label>
+                                        {{ cur_content }}
                                 {% endfor %}
                             </td>
                         {% endfor %}
@@ -94,9 +91,9 @@
                 {#                解答题答案区#}
                 {% for answer_question in answer_question_list %}
                     <tr>
-                        <td colspan="5">
-                            {{ answer_question.no }}&nbsp;
-                            <input type="checkbox" id="td{{ answer_question.no }}">
+                        <td colspan="5" class="answerQuestion">
+                            {{ answer_question.no }}&nbsp;,
+{#                            <input type="checkbox" id="td{{ answer_question.no }}">#}
                             {% for cur_content in answer_question.content %}
                                 {{ cur_content }},
                             {% endfor %}
@@ -193,6 +190,26 @@
             $("#answerQuestionBtn").click(function () {
                 alert("点击了解答题区域的按钮")
             });
+            $('.blankAnswer').click(function () {
+                wrong_answer = $(this).text()
+                wrong_no = wrong_answer.split(" ")[1]
+                wrong_blank = $("#blankWrong_area").val() // 获取原先文本框中的值
+                wrong_blank += " "+wrong_no
+                {#console.log(wrong_answer)#}
+                console.log(wrong_no)
+                console.log(wrong_blank)
+                $("#blankWrong_area").val(wrong_blank) // 填充文本框
+            });
+            $(".answerQuestion").click(function () {
+                wrong_answer = $(this).text()
+                wrong_no = wrong_answer.split(",")[0].split(" ")[28]
+
+                wrong_question_answer = $("#question_answer_wrong_area").val()
+                wrong_question_answer += " "+wrong_no
+                $("#question_answer_wrong_area").val(wrong_question_answer)
+
+
+            })
             $('#btn_submit').click(function () {
                 wrong_choice = $('#wrongChoice_area').val()
                 wrong_blank = $("#blankWrong_area").val()
