@@ -8,5 +8,6 @@ urlpatterns = [
     path('attn/', views.attendanceManage, name="attnManage"),
     path('homework/', views.homeworkManage, name="homeworkManage"),
     path("storewrong/",views.storeWrongProblem,name="storewrong"),
+    path("homeresult/",views.homeResult,name="homeResult"),
     path('test/', views.test, name="test"),
 ]
