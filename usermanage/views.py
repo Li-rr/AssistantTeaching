@@ -151,7 +151,8 @@ def homeResult(request):
             work_name_list.append(work_name['workname'])
 
     # ------获取学生信息
-    stu_info = Score.objects.filter(workname=req_workname).values('stuno','stuname','workcorrection')
+    stu_info = Score.objects.filter(workname=req_workname).values('stuno','stuname','workcorrection','workname')
+    # print(stu_info)
     # answer_list = list(Score.objects.filter(workname = req_workname,stuno=req_stuno).values('worksubmit'))
     # answer_list = answer_list[0]['worksubmit']
     # answer_list = json.loads(answer_list)
