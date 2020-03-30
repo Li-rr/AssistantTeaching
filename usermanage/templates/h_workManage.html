@@ -255,7 +255,7 @@
                         number = str_number +1
                         stuno_next = stu+number
                         stuno_next_number = $("."+stuno_next).text()
-                        if( {{ stu_info.count }} > number)
+                        if( {{ stu_info.count }} >= number)
                             window.location.href = '/homework?workname='+workname_select+"&stuno="+stuno_next_number;
                     },
                     error: function () {
