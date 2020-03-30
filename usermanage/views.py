@@ -44,7 +44,7 @@ def homeworkManage(request):
             work_name_list.append(work_name['workname'])
     # print(work_name_list)
     stu_info = Score.objects.filter(workname=req_workname).values('stuno','stuname')   # 这里写死了，以后改
-    answer_list = list(Score.objects.filter(workname = req_workname,stuno='20161994').values('worksubmit'))    # 这里写死了，以后改
+    answer_list = list(Score.objects.filter(workname = req_workname,stuno=req_stuno).values('worksubmit'))    # 这里写死了，以后改
     answer_list = answer_list[0]['worksubmit']
     answer_list = json.loads(answer_list)
 
