@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div id="workName" class="col-sm-2 col-md-2 col-lg-1">
+                <ul class="list-group text-center">
+                    <strong class="">作业名称</strong>
+                    {% for workname in  workname_list %}
+                        {% if  workname  == req_workname %}
+                            <li class="list-group-item active" id="workname_select">{{ workname }}</li>
+                        {% else %}
+                            <li class="list-group-item">{{ workname }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="sturesult-Area" class="col-sm-10 col-md-10 col-lg-11">
+                <table class="table table-hover table-condensed table-bordered">
+                    <thead>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>错题列表</th>
+                    </thead>
+                    <tbody>
+                    {% for stu in stu_info %}
+                        {% if req_stuno == stu.stuno %}
+                            <tr class="table-primary">
+                                <td class="r_stuno r_stu{{ forloop.counter }}" id="stuno_select">{{ stu.stuno }}</td>
+                                <td>{{ stu.stuname }}</td>
+                                <td>{{ stu.workcorrection }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td class="r_stuno r_stu{{ forloop.counter }}">{{ stu.stuno }}</td>
+                                <td>{{ stu.stuname }}</td>
+                            <td>{{ stu.workcorrection }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+            // 选取第一章的作业
+            $("li").click(function () {
+                {#alert($(this).html())#}
+                workname = $(this).html()   // 获取章节名称,string类型
+                stuno_select = $('#stuno_select').text()
+                console.log("列表点击："+workname+" "+stuno_select)
+                $.ajax({
+                    type:"GET",
+                    url: "/homework",
+                    data:{
+                        "workname":workname,
+                        "stuno":stuno_select
+                    },
+                    success: function (msg) {
+                        console.log(msg)
+                        window.location.href = '/homeresult?workname='+workname+"&stuno="+stuno_select
+                        {#window.location.reload()  //刷新页面#} 这个操作不管用
+                    },
+                    error: function () {
+                        console.log("更新作业数据失败")
+                    }
+                })
+            });
+    </script>
+{% endblock %}

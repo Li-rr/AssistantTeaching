@@ -10,7 +10,7 @@ import json
 # Create your views here.
 
 def index(request):
-    return render(request,"index.html")
+    return render(request,"index.html",{"title":"首页"})
 
 # 返回学生名单
 def getStuTable(request):
@@ -110,7 +110,8 @@ def homeworkManage(request):
                       'problem_answer_list':prob_answer_list,
                       'req_workname':req_workname,
                       'req_stuno':req_stuno,
-                      'wrong_choice_list':wrongChoice_list
+                      'wrong_choice_list':wrongChoice_list,
+                      "title":"作业管理"
                   })
 
 # 存储提交上来的错题序号
@@ -131,6 +132,37 @@ def storeWrongProblem(request):
     Score.objects.filter(Q(stuno=stuno)&Q(workname=workname)).update(workcorrection=wrongall )
 
     return  HttpResponse("success")
+
+def homeResult(request):
+    # --- 获取请求数据
+    req_workname = request.GET.get('workname')
+    req_stuno = request.GET.get('stuno')
+    print("请求数据 作业名称 {} 学号 {}".format(req_workname,req_stuno))
+    if req_workname == None and req_stuno == None:
+        req_workname = "第一章"
+        req_stuno = "20161994"
+
+    # -------获取作业名称
+    work_name_all = Score.objects.values('workname').distinct()
+    work_name_list = []
+    for work_name in work_name_all:
+        work_name['workname'] = replaceNumber(work_name['workname'])
+        if work_name['workname'] not in work_name_list:
+            work_name_list.append(work_name['workname'])
+
+    # ------获取学生信息
+    stu_info = Score.objects.filter(workname=req_workname).values('stuno','stuname','workcorrection')
+    # answer_list = list(Score.objects.filter(workname = req_workname,stuno=req_stuno).values('worksubmit'))
+    # answer_list = answer_list[0]['worksubmit']
+    # answer_list = json.loads(answer_list)
+    return render(request,"h_homeresult.html",
+                  {
+                      "title":"作业结果",
+                      "workname_list":work_name_list,
+                      "stu_info":stu_info,
+                      'req_workname': req_workname,
+                      'req_stuno': req_stuno
+                  })
 def test(request):
     return render(request,'h_workManage.html',{'test':"这里是测试"})
 
