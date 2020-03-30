@@ -27,9 +27,12 @@ def homeworkManage(request):
     #--- 获取请求数据
 
     req_workname = request.GET.get('workname')
-    print("请求数据 {}".format(req_workname))
-    if req_workname == None:
+    req_stuno = request.GET.get('stuno')
+
+    print("请求数据 作业名称 {} 学号 {}".format(req_workname,req_stuno))
+    if req_workname == None and req_stuno == None:
         req_workname = "第一章"
+        req_stuno = "20161994"
 
 
 
@@ -87,7 +90,9 @@ def homeworkManage(request):
                       'choice_double_answer_list':choice_answer,
                       'blanks_double_answer_list':blanks_answer,
                       'answer_question_list':answer_questions,
-                      'problem_answer_list':prob_answer_list
+                      'problem_answer_list':prob_answer_list,
+                      'req_workname':req_workname,
+                      'req_stuno':req_stuno
                   })
 
 def test(request):
