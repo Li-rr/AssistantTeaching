@@ -75,7 +75,12 @@ def homeworkManage(request):
             k_value = float(k)
             # print(k_value)
             if 1.0 <k_value < 2.0:   # 选择题
-                choice_answer.append(ChoiceAnswer(k,v[0]))
+                try:
+                    v_f = v[0]
+                except:
+                    v_f = 'e'
+
+                choice_answer.append(ChoiceAnswer(k,v_f))
             elif 2.0 < k_value <3.0:    # 填空题
                 blanks_answer.append(BlankAnswer(k,v))  # 添加序号和内容，分别为字符串和列表
             else:   # 解答题
