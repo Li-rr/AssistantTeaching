@@ -153,4 +153,5 @@ def readProblem():
 if __name__ == '__main__':
     # file_list = readFileList()
     # insertData(file_list)
-    readProblem()
+    readChoiceAnswer()
+    # readProblem()

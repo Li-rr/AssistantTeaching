@@ -56,7 +56,14 @@
                     </tr>
                 {% endfor %}
                 <tr>
-                    <td colspan="4"><textarea class="form-control"></textarea></td>
+                    <td colspan="4" class="form-group">
+                        <input type="text" id="wrongChoice_area" class="form-control" value="{% for wrong in wrong_choice_list %} {{ wrong }} {% endfor %}">
+{#                        <text class="form-control">#}
+{#                        {% for wronganswer in wrong_choice_list %}#}
+{#                            {{ wronganswer }}#}
+{#                        {% endfor %}#}
+{#                    </text>#}
+                    </td>
                     <td>
                         <button class="button btn-primary" id="choicheBtn">选择题提交</button>
                     </td>

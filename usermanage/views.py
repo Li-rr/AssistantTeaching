@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from usermanage.models import Stu,Answer,Score,Problem
 from usermanage.utils import replaceNumber,isFloat,ChoiceAnswer,BlankAnswer,AnswerQuestion
-from usermanage.utils import _1dTo2d_list,ProblemOjbect
+from usermanage.utils import _1dTo2d_list,ProblemOjbect,checkChoiceAnswer
 import numpy as np
 from django.core import serializers
 import json
@@ -57,10 +57,16 @@ def homeworkManage(request):
     blanks_answer = []  # 填空题
     answer_questions = [] # 解答题
 
+    # 获取标准答案
+    standard_answer_set = list(Answer.objects.filter(workname=req_workname).values("workanswer"))
+    standard_answer_list = standard_answer_set[0]['workanswer']
+    standard_answer_list = json.loads(standard_answer_list)
+    # print(type(standard_answer_list),standard_answer_list)
 
     # -------- 取出学生的答案数据 -------------------
     blank_range,choice_range = 5,5
-    # print(answer_list)
+    # # print(answer_list)
+    # print(standard_answer_list)
     # print(type(answer_list))
     for k,v in answer_list.items():
         # print(k,v,type(k),type(v))
@@ -74,9 +80,14 @@ def homeworkManage(request):
             else:   # 解答题
                 answer_questions.append(AnswerQuestion(k,v))
 
+    choice_answer_bak = choice_answer
+
     choice_answer = _1dTo2d_list(choice_answer,choice_range)
     blanks_answer = _1dTo2d_list(blanks_answer,blank_range)
 
+    # --------------- 检查选择题答案，返回错误选择题的答案序号
+    wrongChoice_list = checkChoiceAnswer(standard_answer_list,choice_answer_bak)
+    wrongChoice_list += ['1.2','1.3','1.4']
     # --------------- 取出填空题&解答题数据
     prob_answer_list = []
     for k,v in problem_list.items():
@@ -92,7 +103,8 @@ def homeworkManage(request):
                       'answer_question_list':answer_questions,
                       'problem_answer_list':prob_answer_list,
                       'req_workname':req_workname,
-                      'req_stuno':req_stuno
+                      'req_stuno':req_stuno,
+                      'wrong_choice_list':wrongChoice_list
                   })
 
 def test(request):

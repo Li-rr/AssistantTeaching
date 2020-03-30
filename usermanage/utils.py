@@ -81,6 +81,18 @@ def _1dTo2d_list(origin_list,dim):
     #         print(cur_fuck)
     return need_list
 
+# 检查选择题答案
+def checkChoiceAnswer(origin_answer, need_checkaAnswer):
+    wrongAnswer_list = []
+    # print(origin_answer)
+    # print(need_checkaAnswer)
+    for choice in need_checkaAnswer:
+        # print(choice)
+        # print(choice.no,choice.content.lower(), origin_answer[choice.no].lower())
+        if choice.content.lower() != origin_answer[choice.no].lower():
+            wrongAnswer_list.append(choice.no)
+            print("错误题目{} {} 正确答案 {}".format(choice.no,choice.content,origin_answer[choice.no]))
+    return wrongAnswer_list
 if __name__ == '__main__':
     str_o = '第1章'
 
