@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from usermanage.models import Stu,Answer,Score,Problem
 from usermanage.utils import replaceNumber,isFloat,ChoiceAnswer,BlankAnswer,AnswerQuestion
 from usermanage.utils import _1dTo2d_list,ProblemOjbect,checkChoiceAnswer
+from django.db.models import Q
 import numpy as np
 from django.core import serializers
 import json
@@ -87,7 +88,7 @@ def homeworkManage(request):
 
     # --------------- 检查选择题答案，返回错误选择题的答案序号
     wrongChoice_list = checkChoiceAnswer(standard_answer_list,choice_answer_bak)
-    wrongChoice_list += ['1.2','1.3','1.4']
+    # wrongChoice_list += ['1.2','1.3','1.4']
     # --------------- 取出填空题&解答题数据
     prob_answer_list = []
     for k,v in problem_list.items():
@@ -107,6 +108,24 @@ def homeworkManage(request):
                       'wrong_choice_list':wrongChoice_list
                   })
 
+# 存储提交上来的错题序号
+def storeWrongProblem(request):
+    stuno = request.GET.get("stuno");
+    workname = request.GET.get("workname");
+    wrong_choice = request.GET.get("choice");
+    wrong_blank = request.GET.get("blank");
+    wrong_quest_answer = request.GET.get("quest_answer");
+
+
+    wrongall = []
+    wrongall ="有问题的题目：{} {} {}".format(wrong_choice , wrong_blank , wrong_quest_answer)
+    print("{} {} {} {} {}".format(stuno,workname,wrong_choice,wrong_blank,wrong_quest_answer))
+    print(wrongall)
+
+    # f_str = {"stuno":stuno,"workname":workname}
+    Score.objects.filter(Q(stuno=stuno)&Q(workname=workname)).update(workcorrection=wrongall )
+
+    return  HttpResponse("success")
 def test(request):
     return render(request,'h_workManage.html',{'test':"这里是测试"})
 

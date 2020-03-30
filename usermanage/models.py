@@ -30,7 +30,7 @@ class Score(models.Model):
     stuname = models.CharField(db_column='stuName', max_length=10, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'score'
         unique_together = (('stuno', 'workname'),)
 

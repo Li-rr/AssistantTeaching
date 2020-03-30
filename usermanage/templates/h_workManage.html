@@ -85,7 +85,7 @@
                 {% endfor %}
 
                 <tr>
-                    <td colspan="4"><textarea class="form-control"></textarea></td>
+                    <td colspan="4"><textarea id="blankWrong_area" class="form-control"></textarea></td>
                     <td>
                         <button class="btn btn-primary" id="blankBtn">填空题提交</button>
                     </td>
@@ -104,10 +104,13 @@
                     </tr>
                 {% endfor %}
                 <tr>
-                    <td colspan="4"><textarea class="form-control"></textarea></td>
+                    <td colspan="4"><textarea id="question_answer_wrong_area" class="form-control"></textarea></td>
                     <td>
                         <button class="btn btn-primary" id="answerQuestionBtn">解答题提交</button>
                     </td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="text-center"><button id="btn_submit" class="btn btn-primary">提交数据</button></td>
                 </tr>
                 </tbody>
             </table>
@@ -189,7 +192,38 @@
             });
             $("#answerQuestionBtn").click(function () {
                 alert("点击了解答题区域的按钮")
-            })
+            });
+            $('#btn_submit').click(function () {
+                wrong_choice = $('#wrongChoice_area').val()
+                wrong_blank = $("#blankWrong_area").val()
+                wrong_question_answer = $("#question_answer_wrong_area").val()
+                stuno_select = $('#stuno_select').text()
+                workname_select = $('#workname_select').text()
+                console.log(stuno_select)
+                console.log(workname_select)
+                console.log(wrong_choice)
+                console.log(wrong_blank)
+                console.log(wrong_question_answer)
+
+                $.ajax({
+                    type: "GET",
+                    url: "/storewrong",
+                    data:{
+                        "choice":wrong_choice,
+                        "blank":wrong_blank,
+                        "quest_answer":wrong_question_answer,
+                        "stuno": stuno_select,
+                        "workname": workname_select
+                    },
+                    success: function () {
+                        alert("上传数据成功")
+                    },
+                    error: function () {
+                        alert("上传数据失败")
+                    }
+                });
+
+            });
         })
     </script>
 {% endblock %}
