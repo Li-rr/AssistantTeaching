@@ -28,6 +28,8 @@ class Score(models.Model):
     workcorrection = models.TextField(db_column='workCorrection', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
     workname = models.CharField(db_column='workName', max_length=10)  # Field name made lowercase.
     stuname = models.CharField(db_column='stuName', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    workstep = models.CharField(db_column='workStep', max_length=10, blank=True,
+                                null=True)  # Field name made lowercase.
 
     class Meta:
         managed = True
